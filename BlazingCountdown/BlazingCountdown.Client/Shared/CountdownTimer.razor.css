@@ -1,0 +1,13 @@
+﻿.time-section{
+    padding: 20px;
+    border-radius: 10px;
+}
+.time-section span{
+    display: block;
+    font-size: 2rem;
+}
+
+.time-section span:last-child{
+    font-size: 1rem;
+    color: #666;
+}

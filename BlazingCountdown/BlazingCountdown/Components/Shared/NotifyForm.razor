@@ -1,0 +1,60 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+@attribute [StreamRendering]
+
+<div class="my-3">
+    <h5 class="text-white">Get notified when we launch our website</h5>
+    <EditForm Model="Model" Enhance FormName="@NotifyFormName" OnValidSubmit="SaveEmailAsync">
+        <DataAnnotationsValidator />
+        <div class="input-group">
+            <InputText type="email" @bind-Value="Model.Email" class="form-control form-control-lg" placeholder="Enter your email" />
+            @if (!_isProcessing)
+            {
+                <button type="submit" class="btn btn-primary">NOTIFY ME</button>
+            }
+            else
+            {
+                <button class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status">Saving...</span>
+                </button>
+            }
+        </div>
+        <ValidationMessage For="() => Model.Email" class="text-danger" />
+    </EditForm>
+</div>
+
+@code {
+    private const string NotifyFormName = "notify-form";
+
+    [SupplyParameterFromForm(FormName = NotifyFormName)]
+    private NotifyModel Model { get; set; } = new();
+
+    private bool _isProcessing;
+
+    private async Task SaveEmailAsync()
+    {
+        _isProcessing = true;
+        try
+        {
+            // Save the email in database or send this email to some external service/api
+            await Task.Delay(3000);
+            Model = new();
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+        finally
+        {
+            _isProcessing = false;
+        }
+    }
+
+    private class NotifyModel
+    {
+        [Required, EmailAddress, DataType(DataType.EmailAddress), Length(7, 150)]
+        public string Email { get; set; }
+    }
+}
